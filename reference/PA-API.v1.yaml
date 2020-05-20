@@ -1,0 +1,139 @@
+openapi: 3.0.0
+info:
+  title: PA Application Programming Interface API
+  version: '1.0'
+  description: Application Programming Interface
+  contact:
+    name: IT ADMIN
+    email: it.admin@paymentasia.com
+  termsOfService: 'https://www.paymentasia.com'
+servers:
+  - url: 'https://gateway.pa-sys.com'
+    description: Gateway
+paths:
+  '/{merchant_token}/payment/query':
+    parameters:
+      - schema:
+          type: string
+        name: merchant_token
+        in: path
+        required: true
+    post:
+      summary: POST query
+      tags:
+        - Payment Query
+      responses:
+        '200':
+          description: OK
+      operationId: post-merchant_token-payment-query
+      description: Query transactions by filters
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                merhcant_reference:
+                  type: string
+                  maxLength: 36
+                  description: same value from your payment request
+                sign:
+                  type: string
+                  maxLength: 128
+                  description: SHA-512 hashed signature
+              required:
+                - merhcant_reference
+                - sign
+        description: Request body require merhcant reference and signature
+  '/{merchant_token}/payout/request':
+    parameters:
+      - schema:
+          type: string
+        name: merchant_token
+        in: path
+        required: true
+    post:
+      summary: Post Payout
+      tags:
+        - Payout Request
+      responses:
+        '200':
+          description: OK
+      operationId: post-merchant_token-payout-request
+      description: ''
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                ' request_reference':
+                  type: string
+                  maxLength: 128
+                  description: unique reference
+                beneficiary_name:
+                  type: string
+                  maxLength: 128
+                  description: recipient name of the account owner
+                bank_name:
+                  type: string
+                  maxLength: 128
+                  description: name of bank
+                account_number:
+                  type: string
+                  maxLength: 64
+                  description: Account number from the Bank
+                currency:
+                  type: string
+                  maxLength: 3
+                  description: Currency ISO Code
+                  example: USD
+                amount:
+                  type: string
+                  maxLength: 24
+                sign:
+                  type: string
+                  maxLength: 128
+                  description: SHA-512 hashed signature
+              required:
+                - ' request_reference'
+                - beneficiary_name
+                - bank_name
+                - account_number
+                - currency
+                - amount
+                - sign
+        description: ''
+  '/{merchant_token}/payout/query':
+    parameters:
+      - schema:
+          type: string
+        name: merchant_token
+        in: path
+        required: true
+    post:
+      summary: Post query
+      tags: []
+      responses:
+        '200':
+          description: OK
+      operationId: post-merchant_token-payout-query
+      description: payout details can be searched by our gateway interface
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                request_reference:
+                  type: string
+                  maxLength: 128
+                  description: unique reference
+                sign:
+                  type: string
+                  maxLength: 128
+                  description: SHA-512 hashed signature
+              required:
+                - request_reference
+components:
+  schemas: {}

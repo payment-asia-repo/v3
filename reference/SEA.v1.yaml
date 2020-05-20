@@ -1,0 +1,131 @@
+openapi: 3.0.0
+info:
+  title: PA Hosted Payment Page
+  version: '1.0'
+  contact:
+    name: 'IT admin '
+    email: it.admin@paymentasia.com
+  termsOfService: 'https://www.paymentasia.com'
+  description: ''
+servers:
+  - url: 'https://payment.pa-sys.com'
+paths:
+  '/app/page/{merhcant_token}':
+    parameters:
+      - schema:
+          type: string
+        name: merhcant_token
+        in: path
+        required: true
+        description: Merchant Token from merchant panel
+    post:
+      summary: HTTP POST Request
+      tags:
+        - booth
+        - payment
+      responses:
+        '200':
+          description: OK
+          headers: {}
+      operationId: post-app-page-merhcant_token
+      requestBody:
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                merchant_reference:
+                  type: string
+                  maxLength: 36
+                  example: 1473865_sf198341
+                  description: |-
+                    Must be unique across payment
+                    request
+                currency:
+                  type: string
+                  maxLength: 3
+                  example: HKD
+                  description: |-
+                    Currency ISO Code 4217, e.g. HKD, USD, CNY, MYR
+                    (Alipay Only support HKD)
+                amount:
+                  type: string
+                  maxLength: 24
+                  example: '1000.00'
+                  description: Amount of the deposit
+                sign:
+                  type: string
+                  maxLength: 128
+                  description: 'SHA-512 hashed signature, ref. appendix.signature'
+                ' return_url':
+                  type: string
+                  maxLength: 255
+                  description: Customerwillbe redirected back to URL provided
+                customer_ip:
+                  type: string
+                  maxLength: 15
+                  example: 214.84.10.150
+                  description: Customerwillbe redirected back to URL provided
+                customer_first_name:
+                  type: string
+                  maxLength: 255
+                  example: Johnny
+                customer_last_name:
+                  type: string
+                  maxLength: 255
+                  example: Johnny
+                customer_address:
+                  type: string
+                customer_phone:
+                  type: string
+                  maxLength: 64
+                  example: '+12134112321'
+                customer_email:
+                  type: string
+                  maxLength: 255
+                  example: request@paymentasia.com
+                customer_state:
+                  type: string
+                  maxLength: 2
+                  example: CA
+                  description: For US and Canada only.
+                customer_country:
+                  type: string
+                  maxLength: 2
+                  description: ISO ALPHA-2 Country Code
+                  example: US
+                network:
+                  type: string
+                  maxLength: 64
+                  example: DirectDebit
+                  description: 'CreditCard(Default), DirectDebit,Alipay'
+                type:
+                  type: string
+                  maxLength: 64
+                  example: Sale
+                Subject:
+                  type: string
+                  maxLength: 255
+                  description: The name or keywords of the order.(Alipay is required)
+                bank_code:
+                  type: string
+                  maxLength: 4
+                  example: VCB
+                  description: 'For NganLuong Pay only e.g. VCB, DAB'
+              required:
+                - merchant_reference
+                - currency
+                - amount
+                - sign
+                - customer_first_name
+                - customer_last_name
+                - customer_phone
+                - customer_email
+            examples: {}
+          application/json:
+            schema:
+              type: object
+              properties: {}
+        description: Sent request by CURL or html form format
+components:
+  schemas: {}
